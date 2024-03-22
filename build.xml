@@ -1,0 +1,41 @@
+<project name="Main" default="compile" basedir=".">
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="dist" location="dist"/>
+    <presetdef name="javac">
+        <javac includeantruntime="false"/>
+    </presetdef>
+    <target name="init">
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/classes"/>
+    </target>
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" debug="true" destdir="${dist}/classes"/>
+    </target>
+    <target name="jar" depends="init,compile">
+        <jar destfile="${dist}/${ant.project.name}.jar" basedir="${dist}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="${ant.project.name}"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="file" unless="game">
+        <property name="game" value="testGame.txt"/>
+    </target>
+    <target name="player" unless="symbol">
+        <property name="symbol" value="O"/>
+    </target>
+    <target name="square" unless="squares">
+        <property name="squares" value="9"/>
+    </target>
+    <target name="run" depends="jar,file,player,square">
+        <java jar="${dist}/${ant.project.name}.jar" fork="true">
+            <arg value="${game}"/>
+            <arg value="${symbol}"/>
+            <arg value="${squares}"/>
+        </java>
+    </target>
+    <target name="clean">
+        <delete dir="${dist}"/>
+    </target>
+</project>
