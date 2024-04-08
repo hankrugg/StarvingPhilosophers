@@ -1,50 +1,110 @@
-package src;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * @author Aidan Scott
- * Symposium is the class that creates, manages and stops all of the plants plus aggregating their product
- */
-class Symposium {
-    public static final long DINNER_TIME = 5 * 1000;
-    static final int numberOfPhilosophers = 5;
-    final TSChopstick[] chopsticks = new TSChopstick[numberOfPhilosophers];
-    final Philosopher[] philosophers = new Philosopher[numberOfPhilosophers];
-    final Thread[] philThreads = new Thread[numberOfPhilosophers];
-    Symposium() {
-        for (int i = 0; i < numberOfPhilosophers; i++){
-            chopsticks[i] = new TSChopstick();
-        }
-        Handed handed = Handed.RIGHT;
-        for (int i = 0; i < numberOfPhilosophers; i++) {
-            philosophers[i] = new Philosopher(handed, chopsticks[i], chopsticks[i % numberOfPhilosophers]);
-            philThreads[i] = new Thread(philosophers[i]);
-            philThreads[i].start();
-        }
+public class Symposium {
+    private final long DINNER_TIME = 20 * 1000;
+    private List<Philosopher> phils;
+    private List<TSChopstick> chopsticks;
+    private List<Thread> philThreads;
+    private final int NUM_PHILOSOPHERS = 5;
+    private final String[] philosopherNames = { "Hank", "Aidan", "Nate", "Ryan", "Dustin"};
+    private final String[] chopstickNames = { "First", "Second", "Third", "Fourth", "Fifth"};
 
-        System.out.println("Waiting for the philosophers to finish their Symposium.");
+    public Symposium(){
+        makeChopsticks();
+        makePhilosophers();
+    }
+
+    private void makeChopsticks() {
+        chopsticks = Collections.synchronizedList(new ArrayList<>());
+        for (int i = 0; i < NUM_PHILOSOPHERS; i++){
+            TSChopstick chopstick = new TSChopstick(chopstickNames[i]);
+            chopsticks.add(chopstick);
+        }
+    }
+
+    private void makePhilosophers() {
+        phils = Collections.synchronizedList(new ArrayList<>());
+        philThreads = Collections.synchronizedList(new ArrayList<>());
+        int index = 1;
+        for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+            if (index > NUM_PHILOSOPHERS - 1) {
+                index = 0;
+            }
+            Philosopher philosopher = new Philosopher(philosopherNames[i], chopsticks.get(i), chopsticks.get(index));
+            Thread philosopherThread = new Thread(philosopher);
+            phils.add(philosopher);
+            philThreads.add(philosopherThread);
+            index++;
+
+        }
+    }
+
+    public synchronized void invitePhilosophers() {
+        for (Thread p : philThreads){
+            p.start(); // Start the thread
+        }
+    }
+
+    public List<Philosopher> checkWhosEating(){
+        List<Philosopher> eaters = new ArrayList<>();
+        for(Philosopher p: getPhilosophers()){
+            if(p.isEating()){
+                eaters.add(p);
+            }
+        }
+        return eaters;
+    }
+
+    public List<TSChopstick> checkUsedChopsticks(){
+        List<TSChopstick> used = new ArrayList<>();
+        for(TSChopstick c: getChopsticks()){
+            if(c.isBeingUsed()){
+                used.add(c);
+            }
+        }
+        return used;
+    }
+
+    private void letThemEat() {
+        long sleepTime = Math.max(1, DINNER_TIME);
         try {
-
-            Thread.sleep(DINNER_TIME);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Customary interruption handling
+            System.err.println("Error");
         }
+    }
 
-        System.out.println("Collecting the Philosopher's ponderings...");
-        for (Philosopher i : philosophers) {
-
-        }
-        for (Thread i : philThreads) {
+    private void endDinner() {
+        for (int i = 0; i < NUM_PHILOSOPHERS; i++){
+            phils.get(i).leaveDinner();
             try {
-                i.join(); // If you aren't doing anything, stop the thread
+                philThreads.get(i).join();
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Customary interruption handling
+                throw new RuntimeException(e);
             }
         }
     }
 
-    // Entrypoint for the program
-    public static void main(String[] args) {
-        Symposium b = new Symposium();
+    public List<TSChopstick> getChopsticks(){
+        return chopsticks;
+    }
 
+    public List<Philosopher> getPhilosophers() {
+        return phils;
+    }
+
+    public static void main(String[] args) {
+        Symposium s = new Symposium();
+        s.makeChopsticks();
+        s.invitePhilosophers();
+        s.letThemEat();
+        s.endDinner();
+
+        for (Philosopher p : s.phils){
+            System.out.println(p.getName() + " ate " + p.servings + " times");
+
+        }
     }
 }

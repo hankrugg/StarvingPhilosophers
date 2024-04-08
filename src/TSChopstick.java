@@ -1,30 +1,31 @@
-package src;
-
 public class TSChopstick {
-/*
-    public synchronized Orange pop() {
-        while (queue.isEmpty()) { // If the queue is empty do not try to pop
-            try {
-                this.wait();// wait if empty
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+
+    private volatile boolean beingUsed = false;
+    private final String name;
+
+    public TSChopstick(String name){
+        this.name = name;
+    }
+
+    public synchronized boolean acquire(String person) {
+        // if it's not being used, change it to being used and return true
+        if (this.beingUsed) {
+            return false;
         }
-        Orange orange = queue.remove(0); // Remove orange from queue
-        this.notifyAll(); // Tell all threads that they can stop waiting
-        return orange;
-
+        this.beingUsed = true;
+        return true;
     }
 
-    public synchronized void push(Orange orange) {
-        queue.add(orange); // Add orange to list
-        this.notifyAll(); // Threads can stop waiting.
+    public synchronized void release(String person) {
+        //change being used to false when released
+        this.beingUsed = false;
     }
 
-    public synchronized int getLength() {
-        return queue.size();
+    public boolean isBeingUsed(){
+        return beingUsed;
     }
-*/
+
+    public String toString(){
+        return name;
+    }
 }
-
-
