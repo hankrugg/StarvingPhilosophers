@@ -1,3 +1,5 @@
+package src;
+
 public class TSChopstick {
 
     private volatile boolean beingUsed = false;
@@ -7,7 +9,7 @@ public class TSChopstick {
         this.name = name;
     }
 
-    public synchronized boolean acquire(String person) {
+    public synchronized boolean acquire() {
         // if it's not being used, change it to being used and return true
         if (this.beingUsed) {
             return false;
@@ -16,7 +18,7 @@ public class TSChopstick {
         return true;
     }
 
-    public synchronized void release(String person) {
+    public synchronized void release() {
         //change being used to false when released
         this.beingUsed = false;
     }
