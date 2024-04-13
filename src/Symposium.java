@@ -7,7 +7,7 @@ import java.util.List;
 public class Symposium {
     private List<Philosopher> phils;
     private List<TSChopstick> chopsticks;
-    private final int NUM_PHILOSOPHERS = 5;
+    private static final int NUM_PHILOSOPHERS = 5;
     public Symposium(){
         makeChopsticks();
         makePhilosophers();
@@ -48,7 +48,7 @@ public class Symposium {
     public List<TSChopstick> checkUsedChopsticks(){
         List<TSChopstick> used = new ArrayList<>();
         for(TSChopstick c: getChopsticks()){
-            if(c.isBeingUsed()){
+            if(c.isUsed()){
                 used.add(c);
             }
         }
@@ -61,5 +61,8 @@ public class Symposium {
 
     public List<Philosopher> getPhilosophers() {
         return phils;
+    }
+    public int getNumPhilosophers(){
+        return NUM_PHILOSOPHERS;
     }
 }
