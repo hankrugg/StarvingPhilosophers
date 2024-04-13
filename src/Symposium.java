@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,18 +95,5 @@ public class Symposium {
 
     public List<Philosopher> getPhilosophers() {
         return phils;
-    }
-
-    public static void main(String[] args) {
-        Symposium s = new Symposium();
-        s.makeChopsticks();
-        s.invitePhilosophers();
-        s.letThemEat();
-        s.endDinner();
-
-        for (Philosopher p : s.phils){
-            System.out.println(p.getName() + " ate " + p.servings + " times");
-
-        }
     }
 }
