@@ -16,12 +16,15 @@ public class Philosopher implements Runnable {
     private final TSChopstick rightChop;
     private final TSChopstick leftChop;
     private final int TIME_IT_TAKES_TO_EAT = 500;
-    public volatile int servings;
+    private int servings;
+    private Thread philThread;
 
     Philosopher(String name, TSChopstick rightChop, TSChopstick leftChop) {
         this.name = name;
         this.rightChop = rightChop;
         this.leftChop = leftChop;
+        philThread = new Thread(this);
+
     }
     @Override
     public void run() {
@@ -52,11 +55,6 @@ public class Philosopher implements Runnable {
                 }
             }
     }
-
-    public void leaveDinner(){
-        this.attending = false;
-    }
-
     public String getName(){
         return name;
     }
@@ -69,8 +67,16 @@ public class Philosopher implements Runnable {
         return leftChop;
     }
 
-    public TSChopstick getRightChop() {
-        return rightChop;
+    public void joinThread(){
+        try {
+            philThread.join();
+        } catch (InterruptedException e) {
+            System.err.println("Philosopher " + name + "join thread interrupted");
+        }
+    }
+
+    public void startThead(){
+        philThread.start();
     }
 
     // TODO: return statistics from philosophers:
