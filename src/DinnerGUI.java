@@ -8,12 +8,12 @@ import java.awt.geom.Line2D;
 import java.util.List;
 
 public class DinnerGUI extends JPanel {
-    private Symposium dinner = new Symposium();
-    private final int NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
     private final int TABLE_RADIUS = 150;
     private final int PHILOSOPHER_RADIUS = 20;
-    private final int PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
     private final List<Philosopher> philosophers;
+    private final Symposium dinner = new Symposium();
+    private final int NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
+    private final int PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
 
     public DinnerGUI() {
         this.philosophers = dinner.getPhilosophers();
@@ -27,6 +27,21 @@ public class DinnerGUI extends JPanel {
             }
         });
         timer.start(); // Start the timer
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+
+            // Create GUI and frame
+            DinnerGUI panel = new DinnerGUI();
+            panel.dinner.invitePhilosophers();
+
+            JFrame frame = new JFrame("Dinner Table");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(500, 500);
+            frame.getContentPane().add(panel);
+            frame.setVisible(true);
+        });
     }
 
     @Override
@@ -90,20 +105,5 @@ public class DinnerGUI extends JPanel {
         g2d.fillOval(x - PHILOSOPHER_RADIUS, y - PHILOSOPHER_RADIUS, 2 * PHILOSOPHER_RADIUS, 2 * PHILOSOPHER_RADIUS);
         g2d.setColor(Color.BLACK);
         g2d.drawString(name, x - PHILOSOPHER_RADIUS / 2, y + PHILOSOPHER_RADIUS + 10);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-
-            // Create GUI and frame
-            DinnerGUI panel = new DinnerGUI();
-            panel.dinner.invitePhilosophers();
-
-            JFrame frame = new JFrame("Dinner Table");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(500, 500);
-            frame.getContentPane().add(panel);
-            frame.setVisible(true);
-        });
     }
 }
