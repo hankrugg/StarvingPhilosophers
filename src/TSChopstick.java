@@ -2,7 +2,7 @@ package src;
 
 public class TSChopstick {
 
-    private volatile boolean beingUsed = false;
+    private volatile boolean Used = false;
     private final String name;
 
     public TSChopstick(String name){
@@ -11,20 +11,25 @@ public class TSChopstick {
 
     public synchronized boolean acquire() {
         // if it's not being used, change it to being used and return true
-        if (this.beingUsed) {
+        if (this.Used) {
             return false;
+        }else{
+            this.Used = true;
+            return true;
         }
-        this.beingUsed = true;
-        return true;
     }
 
     public synchronized void release() {
         //change being used to false when released
-        this.beingUsed = false;
+        if(Used) {
+            this.Used = false;
+        }else{
+            throw(new RuntimeException("Chopstick " + name + " is already released"));
+        }
     }
 
-    public boolean isBeingUsed(){
-        return beingUsed;
+    public boolean isUsed(){
+        return Used;
     }
 
     public String toString(){
