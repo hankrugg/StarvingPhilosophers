@@ -1,3 +1,5 @@
+package src;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,23 +36,21 @@ public class Philosopher implements Runnable {
     }
 
 
-    private synchronized boolean tryToEat() throws InterruptedException {
-            if (rightChop.acquire(name)){
-                if (leftChop.acquire(name)){
+    private synchronized void tryToEat() throws InterruptedException {
+            if (rightChop.acquire()){
+                if (leftChop.acquire()){
                     isEating = true;
-                    System.out.println(name + " is eating with " + rightChop + " and " + leftChop);
                     Thread.sleep(TIME_IT_TAKES_TO_EAT);
-                    System.out.println(name + " released " + rightChop + " and " + leftChop);
                     servings++;
                     isEating = false;
-                    rightChop.release(name);
-                    leftChop.release(name);
-                    return true;
+                    rightChop.release();
+                    leftChop.release();
+                    // after releasing both chopsticks, the philosopher will think for a random amount of time
+                    Thread.sleep((long) (Math.random() * TIME_IT_TAKES_TO_EAT));
+                } else{
+                    rightChop.release();
                 }
-                rightChop.release(name);
-                return false;
             }
-            return false;
     }
 
     public void leaveDinner(){
