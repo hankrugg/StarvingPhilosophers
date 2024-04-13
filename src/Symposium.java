@@ -24,14 +24,14 @@ public class Symposium {
     private void makePhilosophers() {
         phils = Collections.synchronizedList(new ArrayList<>());
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
-            Philosopher philosopher = new Philosopher("Philosopher " + i, chopsticks.get(i), chopsticks.get((i+1)%(NUM_PHILOSOPHERS-1)));
+            Philosopher philosopher = new Philosopher("Phil " + i, chopsticks.get(i), chopsticks.get((i+1)%(NUM_PHILOSOPHERS-1)));
             phils.add(philosopher);
         }
     }
 
     public synchronized void invitePhilosophers() {
         for (Philosopher p : phils){
-            p.startThead(); // Start the thread
+            p.startPhil(); // Start the thread
         }
     }
 
