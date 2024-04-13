@@ -8,24 +8,25 @@ import java.awt.geom.Line2D;
 import java.util.List;
 
 public class DinnerGUI extends JPanel {
-    private final int NUM_PHILOSOPHERS = 5;
+    private Symposium dinner = new Symposium();
+    private final int NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
     private final int TABLE_RADIUS = 150;
     private final int PHILOSOPHER_RADIUS = 20;
     private final int PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
-    private final int UPDATE_INTERVAL = 100; // 1 second
-    private volatile List<Philosopher> philosophers;
-    private Timer timer;
-    private Symposium dinner = new Symposium();
+    private final List<Philosopher> philosophers;
 
     public DinnerGUI() {
         this.philosophers = dinner.getPhilosophers();
-        this.timer = new Timer(UPDATE_INTERVAL, new ActionListener() {
+        // Repaint the panel every second
+        // 1 second
+        int UPDATE_INTERVAL = 100;
+        Timer timer = new Timer(UPDATE_INTERVAL, new ActionListener() {
             @Override
             public synchronized void actionPerformed(ActionEvent e) {
                 repaint(); // Repaint the panel every second
             }
         });
-        this.timer.start(); // Start the timer
+        timer.start(); // Start the timer
     }
 
     @Override
