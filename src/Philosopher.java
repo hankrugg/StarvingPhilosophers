@@ -1,9 +1,5 @@
 package src;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * @author Aidan Scott
  * Philosopher is class that is able to start and create and manage many workers which all do a different task in the
@@ -67,15 +63,16 @@ public class Philosopher implements Runnable {
         return leftChop;
     }
 
-    public void joinThread(){
+    public void stopPhil(){
         try {
+            attending = false;
             philThread.join();
         } catch (InterruptedException e) {
             System.err.println("Philosopher " + name + "join thread interrupted");
         }
     }
 
-    public void startThead(){
+    public void startPhil(){
         philThread.start();
     }
 
