@@ -15,20 +15,24 @@ import java.util.List;
  * many times they have eaten.
  */
 public class DinnerGUI extends JPanel {
-    public static final int DINNER_TIME = 20 * 1000;
+    private final int DINNER_TIME;
     private final int TABLE_RADIUS = 150;
     private final int PHILOSOPHER_RADIUS = 20;
     private final List<Philosopher> philosophers;
-    private final Symposium dinner = new Symposium();
-    private final int NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
-    private final int PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
+    private final Symposium dinner;
+    private final int NUM_PHILOSOPHERS ;
+    private final int PHILOSOPHER_GAP_ANGLE ;
 
     /**
      * Gui constructor contains a timer that calls the repaint method when the timer is up.
      * This is used to maintain the correct display of eating or hungry philosophers and chopsticks.
      */
-    public DinnerGUI() {
+    public DinnerGUI(Symposium _dinner, int runtime) {
+        dinner = _dinner;
         this.philosophers = dinner.getPhilosophers();
+        NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
+        PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
+        DINNER_TIME = runtime * 1000;
         // Repaint the panel
         int UPDATE_INTERVAL = 100;
         Timer timer = new Timer(UPDATE_INTERVAL, new ActionListener() {
@@ -55,20 +59,53 @@ public class DinnerGUI extends JPanel {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
+        if(validateArgs(args)){
+            SwingUtilities.invokeLater(() -> {
+                int philNumber = Integer.parseInt(args[0]);
+                int runtime = Integer.parseInt(args[1]);
+                // Create GUI and frame
+                Symposium dinner = new Symposium(philNumber);
+                DinnerGUI panel = new DinnerGUI(dinner, runtime);
+                panel.dinner.invitePhilosophers();
 
-            // Create GUI and frame
-            DinnerGUI panel = new DinnerGUI();
-            panel.dinner.invitePhilosophers();
 
+                JFrame frame = new JFrame("Dinner Table");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(500, 500);
+                frame.getContentPane().add(panel);
+                frame.setVisible(true);
 
-            JFrame frame = new JFrame("Dinner Table");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(500, 500);
-            frame.getContentPane().add(panel);
-            frame.setVisible(true);
+            });
+        }else{
+            System.err.println("Please pass in valid arguments. Two arguments for number of philosophers and runtime in seconds");
+        }
 
-        });
+    }
+
+    /**
+     * ValidateArgs makes sure that the input args are the correct length and able to be parsed into ints
+     * @param args args passed in within the main function
+     * @return true if valid and false if invalid
+     */
+    public static boolean validateArgs(String[] args){
+        if (args.length == 2) {
+            try{
+                Integer.parseInt(args[0]);
+            }catch (NumberFormatException e){
+                System.err.println("Invalid philosopher quantity, must be an integer");
+                return false;
+            }
+            try{
+                Integer.parseInt(args[1]);
+            }catch (NumberFormatException e){
+                System.err.println("Invalid runtime, must be an integer");
+                return false;
+            }
+            return true;
+        }else{
+            System.err.println("Invalid number of arguments, you must pass 2 arguments; number of philosophers and runtime in seconds");
+            return false;
+        }
     }
 
     /**

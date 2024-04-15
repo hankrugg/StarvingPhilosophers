@@ -8,14 +8,15 @@ import java.util.List;
  * Symposium contains the logic to create chopsticks and philosophers
  */
 public class Symposium {
-    private static final int NUM_PHILOSOPHERS = 5; // the number of philosophers and chopsticks
+    private final int NUM_PHILOSOPHERS; // the number of philosophers and chopsticks
     private List<Philosopher> phils; // List of philosophers
     private List<TSChopstick> chopsticks;
 
     /**
      * Symposium makes the chopsticks then the philosophers
      */
-    public Symposium() {
+    public Symposium(int num_philosophers) {
+        NUM_PHILOSOPHERS = num_philosophers;
         makeChopsticks();
         makePhilosophers();
     }

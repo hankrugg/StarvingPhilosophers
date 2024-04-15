@@ -19,8 +19,16 @@
             </manifest>
         </jar>
     </target>
-    <target name="run" depends="jar">
+    <target name="philNumber" unless="number">
+        <property name="number" value="5"/>
+    </target>
+    <target name="runtime" unless="time">
+        <property name="time" value="20"/>
+    </target>
+    <target name="run" depends="jar, philNumber, runtime">
         <java jar="${dist}/${ant.project.name}.jar" fork="true">
+            <arg value="${number}"/>
+            <arg value="${time}"/>
         </java>
     </target>
     <target name="clean">
