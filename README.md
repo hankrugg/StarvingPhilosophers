@@ -25,6 +25,23 @@ Run the program by typing:
 ant run
 ```
 
+This program will also run with two arguments:
+```
+-Dnumber=<number_of_philosophers>
+```
+and 
+```
+-Dtime=<time_of_dinner>
+```
+
+The number of philosophers must be between 3 and 10 and the time of dinner must be between 3 and 30 (seconds).
+
+To use these arguments, run 
+
+```
+ant run -Dnumber=7 -Dtime=20
+```
+
 ### Challenges
 The aforementioned problems, race conditions, starvation and deadlocks were our challenges.
 Out of these problems, the major challenge was solving deadlocks.
