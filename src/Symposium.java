@@ -1,3 +1,4 @@
+package src;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,7 +104,7 @@ public class Symposium {
     /**
      * Stops all the philosopher threads
      */
-    public void tellThemToLeave(){
+    public void endDinner(){
         for(Philosopher phil: phils){
             phil.stopPhil();
         }

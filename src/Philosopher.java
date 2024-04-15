@@ -1,3 +1,4 @@
+package src;
 /**
  * @author Aidan Scott and Hank Rugg
  * Philosopher is class, once started, eats rice (uses two chopstics and waits) then releases both chopstics
@@ -67,7 +68,7 @@ public class Philosopher implements Runnable {
                 leftChop.release();
                 servings++; // increment metric
                 // The philosopher will think for a random amount of time
-                Thread.sleep((long) (Math.random() * TIME_IT_TAKES_TO_EAT));
+                Thread.sleep((long) (Math.random() * TIME_IT_TAKES_TO_EAT*2));
             } else {
                 rightChop.release(); // release the first chopstick if the second couldn't be acquired
             }
@@ -108,6 +109,8 @@ public class Philosopher implements Runnable {
         try {
             attending = false; // stops look of philosopher eating
             philThread.join(); // stops the phil thread
+            System.out.println(name + " stopped.");
+            System.out.println(name + " ate " + servings + " servings of rice.");
         } catch (InterruptedException e) {
             System.err.println("Philosopher " + name + " join thread interrupted");
         }
@@ -121,16 +124,9 @@ public class Philosopher implements Runnable {
     }
 
     /**
-     * Gets the amount of servings
+     * Gets the number of servings
      */
     public int getServings(){
         return servings;
     }
-
-    // TODO: return statistics from philosophers:
-    // avg wait time?
-    // times eating rice
-    // whatever else you think
-    // this is where we can implement the metric gathering
-
 }
