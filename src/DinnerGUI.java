@@ -44,8 +44,10 @@ public class DinnerGUI extends JPanel {
                 count += UPDATE_INTERVAL; // Increment the counter
                 if (count >= DINNER_TIME) {
                     dinner.endDinner(); // Stops the dinner, stops all philosophers
+                    JOptionPane.showMessageDialog(null, "Dinner ended.");
                     ((Timer) e.getSource()).stop(); // Stop the timer
                     System.out.println("Dinner ended, safe to close");
+                    System.exit(0);
                 }
             }
         });
@@ -99,6 +101,22 @@ public class DinnerGUI extends JPanel {
                 Integer.parseInt(args[1]);
             }catch (NumberFormatException e){
                 System.err.println("Invalid runtime, must be an integer");
+                return false;
+            }
+            if(Integer.parseInt(args[0]) < 3){ // The dinner party must have more than 2 attendees
+                System.err.println("2 isn't a party! You must have 3 or more philosophers attend the dinner.");
+                return false;
+            }
+            if(Integer.parseInt(args[0]) > 10){ // The dinner party must have more than 2 attendees
+                System.err.println("We didn't make enough rice for that many philosophers! You must have less than 10 philosophers attend the dinner.");
+                return false;
+            }
+            if(Integer.parseInt(args[1]) > 30){ // The dinner party must have more than 2 attendees
+                System.err.println("That's too long to eat, the philosophers get full after a 30 second dinner! Make the time less than 30 seconds.");
+                return false;
+            }
+            if(Integer.parseInt(args[1]) < 3){ // The dinner party must have more than 2 attendees
+                System.err.println("That's too short to eat, the philosophers need to eat for at least 3 second! Make the time more than 3 seconds.");
                 return false;
             }
             return true;
