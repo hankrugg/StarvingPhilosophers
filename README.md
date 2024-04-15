@@ -25,5 +25,12 @@ Run the program by typing:
 ant run
 ```
 
+### Challenges
+The aforementioned problems that needed to be solved, race conditions, starvation and deadlocks, were our major challenges.
+Out of these problems, the major challenge was solving deadlocks. There are 4 conditions for deadlocks to occur, and 
+solving one of them solves deadlocks, so we had many options for solutions. Solving the hold and yield condition was 
+opted to be solved.
+
+#### thank you
 I hope you find our solution interesting, thank you for checking this out!
 
