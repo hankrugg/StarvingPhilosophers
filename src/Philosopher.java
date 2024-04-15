@@ -1,5 +1,3 @@
-package src;
-
 /**
  * @author Aidan Scott and Hank Rugg
  * Philosopher is class, once started, eats rice (uses two chopstics and waits) then releases both chopstics

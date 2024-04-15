@@ -1,5 +1,3 @@
-package src;
-
 /**
  * @author Aidan Scott and Hank Rugg
  * TSChopstick is used to provide safe concurrent access to the chopstick object.
