@@ -24,10 +24,9 @@ public class TSChopstick {
      * it will not be allowed to be used by any other thread until it is released
      */
     public synchronized boolean acquire() {
-        // if it's not being used, change it to being used and return true
-        if (this.Used) {
+        if (this.Used) { // If used, return false to show that the chopstick cant be acquired
             return false;
-        } else {
+        } else {// if not used, return true to show that the chopstick was acquired
             this.Used = true;
             return true;
         }
@@ -39,10 +38,9 @@ public class TSChopstick {
      * @throws RuntimeException
      */
     public synchronized void release() {
-        //change being used to false when released
-        if (Used) {
+        if (Used) { // if used, then release it
             this.Used = false;
-        } else {
+        } else { // if not used, then throw exception
             throw (new RuntimeException("Chopstick " + name + " is already released"));
         }
     }
