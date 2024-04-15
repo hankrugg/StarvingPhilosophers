@@ -2,109 +2,108 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Aidan Scott and Hank Rugg
+ * Symposium contains the logic to create chopsticks and philosophers
+ */
 public class Symposium {
-    private final long DINNER_TIME = 5 * 1000;
-    private List<Philosopher> phils;
+    private static final int NUM_PHILOSOPHERS = 5; // the number of philosophers and chopsticks
+    private List<Philosopher> phils; // List of philosophers
     private List<TSChopstick> chopsticks;
-    private List<Thread> philThreads;
-    private final int NUM_PHILOSOPHERS = 5;
-    private final String[] philosopherNames = { "Hank", "Aidan", "Nate", "Ryan", "Dustin"};
-    private final String[] chopstickNames = { "First", "Second", "Third", "Fourth", "Fifth"};
 
-    public Symposium(){
+    /**
+     * Symposium makes the chopsticks then the philosophers
+     */
+    public Symposium() {
         makeChopsticks();
         makePhilosophers();
     }
 
+    /**
+     * MakeChopsticks creates a list and fills it with chopsticks of quantity of number of philosophers
+     */
     private void makeChopsticks() {
-        chopsticks = Collections.synchronizedList(new ArrayList<>());
-        for (int i = 0; i < NUM_PHILOSOPHERS; i++){
-            TSChopstick chopstick = new TSChopstick(chopstickNames[i]);
+        chopsticks = Collections.synchronizedList(new ArrayList<>()); // create list
+        for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+            TSChopstick chopstick = new TSChopstick("Chopstick " + i); // create chopstick of name i
             chopsticks.add(chopstick);
         }
     }
 
+    /**
+     * makePhilosophers creates a list and fills it with philosophers with corresponding chopsticks
+     * Each philosopher has two specific chopsticks for their left and right hands.
+     * Each philosopher will share their chopsticks with the philosophers that sit beside them ( 0 1 2 ) 0 and 2 beside 1
+     */
     private void makePhilosophers() {
-        phils = Collections.synchronizedList(new ArrayList<>());
-        philThreads = Collections.synchronizedList(new ArrayList<>());
-        int index = 1;
+        phils = Collections.synchronizedList(new ArrayList<>()); // create list
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
-            if (index > NUM_PHILOSOPHERS - 1) {
-                index = 0;
-            }
-            Philosopher philosopher = new Philosopher(philosopherNames[i], chopsticks.get(i), chopsticks.get(index));
-            Thread philosopherThread = new Thread(philosopher);
-            phils.add(philosopher);
-            philThreads.add(philosopherThread);
-            index++;
-
+            // Create philosopher with specific chopsticks and adds them to the list
+            phils.add(new Philosopher("Phil " + i, chopsticks.get(i), chopsticks.get((i + 1) % (NUM_PHILOSOPHERS - 1))));
         }
     }
 
+    /**
+     * invitePhilosophers stars the philosophers eating (philosophizing)
+     */
     public synchronized void invitePhilosophers() {
-        for (Thread p : philThreads){
-            p.start(); // Start the thread
+        for (Philosopher p : phils) {
+            p.startPhil(); // Start the thread
         }
     }
 
-    public List<Philosopher> checkWhosEating(){
+    /**
+     * checkWhosEating returns list of all the currently eating philosophers
+     *
+     * @return eaters ArrayList<Philospher>
+     */
+    public List<Philosopher> checkWhosEating() {
         List<Philosopher> eaters = new ArrayList<>();
-        for(Philosopher p: getPhilosophers()){
-            if(p.isEating()){
-                eaters.add(p);
+        for (Philosopher p : getPhilosophers()) {
+            if (p.isEating()) {
+                eaters.add(p); // if philosopher is eating, add them to the list
             }
         }
         return eaters;
     }
 
-    public List<TSChopstick> checkUsedChopsticks(){
+    /**
+     * checkUsedChopsticks returns all currently used chopsticks
+     *
+     * @return usedChopsticks ArrayList<TSChopstick>
+     */
+    public List<TSChopstick> checkUsedChopsticks() {
         List<TSChopstick> used = new ArrayList<>();
-        for(TSChopstick c: getChopsticks()){
-            if(c.isBeingUsed()){
-                used.add(c);
+        for (TSChopstick c : getChopsticks()) {
+            if (c.isUsed()) {
+                used.add(c); // if chopstick is being used, then add it to the list
             }
         }
         return used;
     }
 
-    private void letThemEat() {
-        long sleepTime = Math.max(1, DINNER_TIME);
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            System.err.println("Error");
-        }
-    }
-
-    private void endDinner() {
-        for (int i = 0; i < NUM_PHILOSOPHERS; i++){
-            phils.get(i).leaveDinner();
-            try {
-                philThreads.get(i).join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public List<TSChopstick> getChopsticks(){
+    /**
+     * getChopsticks returns all chopsticks
+     *
+     * @return chopsticks List<TSChopsticks>
+     */
+    public List<TSChopstick> getChopsticks() {
         return chopsticks;
     }
 
+    /**
+     * getPhilosophers returns all philosophers
+     *
+     * @return philosophers List<Philosophers>
+     */
     public List<Philosopher> getPhilosophers() {
         return phils;
     }
 
-    public static void main(String[] args) {
-        Symposium s = new Symposium();
-        s.makeChopsticks();
-        s.invitePhilosophers();
-        s.letThemEat();
-        s.endDinner();
-
-        for (Philosopher p : s.phils){
-            System.out.println(p.getName() + " ate " + p.servings + " times");
-
-        }
+    /**
+     * @return number of philosophers int
+     */
+    public int getNumPhilosophers() {
+        return NUM_PHILOSOPHERS;
     }
 }

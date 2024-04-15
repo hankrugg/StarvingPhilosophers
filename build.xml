@@ -1,4 +1,4 @@
-<project name="Main" default="compile" basedir=".">
+<project name="src.DinnerGUI" default="compile" basedir=".">
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
     <property name="dist" location="dist"/>
@@ -19,20 +19,8 @@
             </manifest>
         </jar>
     </target>
-    <target name="file" unless="game">
-        <property name="game" value="testGame.txt"/>
-    </target>
-    <target name="player" unless="symbol">
-        <property name="symbol" value="O"/>
-    </target>
-    <target name="square" unless="squares">
-        <property name="squares" value="9"/>
-    </target>
-    <target name="run" depends="jar,file,player,square">
+    <target name="run" depends="jar">
         <java jar="${dist}/${ant.project.name}.jar" fork="true">
-            <arg value="${game}"/>
-            <arg value="${symbol}"/>
-            <arg value="${squares}"/>
         </java>
     </target>
     <target name="clean">
