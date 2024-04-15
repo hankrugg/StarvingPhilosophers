@@ -41,6 +41,7 @@ public class DinnerGUI extends JPanel {
                 if (count >= DINNER_TIME) {
                     dinner.endDinner(); // Stops the dinner, stops all philosophers
                     ((Timer) e.getSource()).stop(); // Stop the timer
+                    System.out.println("Dinner ended, safe to close");
                 }
             }
         });
