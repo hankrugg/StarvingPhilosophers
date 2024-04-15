@@ -13,7 +13,7 @@ public class Philosopher implements Runnable {
     private final String name;
     private final TSChopstick rightChop;
     private final TSChopstick leftChop;
-    private final int TIME_IT_TAKES_TO_EAT = 500;
+    private final int TIME_IT_TAKES_TO_EAT = 1000;
     public volatile int servings;
 
     Philosopher(String name, TSChopstick rightChop, TSChopstick leftChop) {

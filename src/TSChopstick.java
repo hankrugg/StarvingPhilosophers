@@ -10,6 +10,11 @@ public class TSChopstick {
     public synchronized boolean acquire(String person) {
         // if it's not being used, change it to being used and return true
         if (this.beingUsed) {
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
             return false;
         }
         this.beingUsed = true;
@@ -19,6 +24,7 @@ public class TSChopstick {
     public synchronized void release(String person) {
         //change being used to false when released
         this.beingUsed = false;
+//        notifyAll();
     }
 
     public boolean isBeingUsed(){

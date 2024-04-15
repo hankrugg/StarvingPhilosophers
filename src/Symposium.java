@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Symposium {
-    private final long DINNER_TIME = 20 * 1000;
+    private final long DINNER_TIME = 5 * 1000;
     private List<Philosopher> phils;
     private List<TSChopstick> chopsticks;
     private List<Thread> philThreads;
