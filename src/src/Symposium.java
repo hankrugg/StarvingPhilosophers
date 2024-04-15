@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -98,6 +100,15 @@ public class Symposium {
      */
     public List<Philosopher> getPhilosophers() {
         return phils;
+    }
+
+    /**
+     * Stops all the philosopher threads
+     */
+    public void tellThemToLeave(){
+        for(Philosopher phil: phils){
+            phil.stopPhil();
+        }
     }
 
     /**

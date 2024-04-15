@@ -1,3 +1,5 @@
+package src;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,6 +7,14 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.util.List;
 
+/**
+ * @author Hank Rugg and Aidan Scott
+ *
+ * This is the main class that runs the Dinner GUI to display the philosophers while they are eating their dinner.
+ * It uses a GUI to convey the information of which philosophers are eating and which are hungry.
+ * The GUI will run for the amount of time signified in the DINNER_TIME variable while displaying who is eating and how
+ * many times they have eaten.
+ */
 public class DinnerGUI extends JPanel {
     private final int TABLE_RADIUS = 150;
     private final int PHILOSOPHER_RADIUS = 20;
@@ -12,21 +22,38 @@ public class DinnerGUI extends JPanel {
     private final Symposium dinner = new Symposium();
     private final int NUM_PHILOSOPHERS = dinner.getNumPhilosophers();
     private final int PHILOSOPHER_GAP_ANGLE = 360 / NUM_PHILOSOPHERS;
+    public static final int DINNER_TIME = 5 * 1000;
 
+    /**
+     * Gui constructor. Contains a timer that calls the repaint method when the timer is up. This is used to maintain
+     * the correct display of eating or hungry philosophers and chopsticks.
+     */
     public DinnerGUI() {
         this.philosophers = dinner.getPhilosophers();
-        // Repaint the panel every second
-        // 1 second
+        // Repaint the panel
         int UPDATE_INTERVAL = 100;
         Timer timer = new Timer(UPDATE_INTERVAL, new ActionListener() {
+            int count = 0; // Counter to track the number of timer ticks
+
             @Override
             public synchronized void actionPerformed(ActionEvent e) {
-                repaint(); // Repaint the panel every second
+                repaint(); // Repaint the panel every 100 milliseconds
+                count+= UPDATE_INTERVAL; // Increment the counter
+                if (count >= DINNER_TIME) {
+                    dinner.tellThemToLeave();
+                    ((Timer) e.getSource()).stop(); // Stop the timer
+                }
             }
         });
         timer.start(); // Start the timer
     }
 
+
+    /**
+     * Main method that runs the dinner gui and all functions associated with it.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
 
@@ -34,14 +61,22 @@ public class DinnerGUI extends JPanel {
             DinnerGUI panel = new DinnerGUI();
             panel.dinner.invitePhilosophers();
 
+
             JFrame frame = new JFrame("Dinner Table");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(500, 500);
             frame.getContentPane().add(panel);
             frame.setVisible(true);
+
         });
     }
 
+    /**
+     * Paints the current state of eating and hungry philosophers. The philosopher will be green if it is eating and
+     * grey otherwise. Each chopstick will be displayed if it is not being used, otherwise it will not be painted.
+     *
+     * @param g the Graphics object to protect
+     */
     @Override
     protected synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -80,9 +115,9 @@ public class DinnerGUI extends JPanel {
 
             // Draw philosopher
             if (dinner.checkWhosEating().contains(philosopher)) {
-                drawPhilosopher(g2d, phiX, phiY, philosopher.getName(), Color.GREEN);
+                drawPhilosopher(g2d, phiX, phiY, philosopher.getName(), philosopher.getServings(), Color.GREEN);
             } else {
-                drawPhilosopher(g2d, phiX, phiY, philosopher.getName(), Color.GRAY);
+                drawPhilosopher(g2d, phiX, phiY, philosopher.getName(),philosopher.getServings(), Color.GRAY);
             }
 
             // Draw chopsticks if they are not being used
@@ -92,16 +127,35 @@ public class DinnerGUI extends JPanel {
         }
     }
 
+    /**
+     * Draw chopstick for each philosopher
+     *
+     * @param g2d 2Dimensional graphics object to draw
+     * @param x1 x1 of chopstick
+     * @param y1 y1 of chopstick
+     * @param x2 x2 of chopstick
+     * @param y2 y2 of chopstick
+     */
     private void drawChopstick(Graphics2D g2d, int x1, int y1, int x2, int y2) {
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2)); // Set chopstick thickness
         g2d.draw(new Line2D.Float(x1, y1, x2, y2));
     }
 
-    private void drawPhilosopher(Graphics2D g2d, int x, int y, String name, Color color) {
+    /**
+     * Draw each philosopher
+     *
+     * @param g2d 2Dimensional graphics object to draw
+     * @param x x coordinate of philosopher
+     * @param y y coordinate of philosopher
+     * @param name name of philosopher
+     * @param servings amount of times the philosopher has eaten
+     * @param color color of the philosopher, green if eating and grey if thinking/hungry
+     */
+    private void drawPhilosopher(Graphics2D g2d, int x, int y, String name, int servings, Color color) {
         g2d.setColor(color);
         g2d.fillOval(x - PHILOSOPHER_RADIUS, y - PHILOSOPHER_RADIUS, 2 * PHILOSOPHER_RADIUS, 2 * PHILOSOPHER_RADIUS);
         g2d.setColor(Color.BLACK);
-        g2d.drawString(name, x - PHILOSOPHER_RADIUS / 2, y + PHILOSOPHER_RADIUS + 10);
+        g2d.drawString(name+ " ate " + servings + " times", x - PHILOSOPHER_RADIUS / 2 - 30, y + PHILOSOPHER_RADIUS + 10 );
     }
 }

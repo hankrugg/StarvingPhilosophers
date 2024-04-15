@@ -1,3 +1,5 @@
+package src;
+
 /**
  * @author Aidan Scott and Hank Rugg
  * Philosopher is class, once started, eats rice (uses two chopstics and waits) then releases both chopstics
@@ -12,7 +14,7 @@ public class Philosopher implements Runnable {
     private final Thread philThread;
     private volatile boolean attending = true; // if the philosopher is attending, then keeping dining
     private volatile boolean isEating = false; // true if the philosopher is currently eating
-    private int servings; // number of times philosopher has eaten
+    private volatile int servings; // number of times philosopher has eaten
 
     /**
      * Philosopher sets the name, and each chopstick
@@ -61,11 +63,11 @@ public class Philosopher implements Runnable {
             if (leftChop.acquire()) { // attempt to acquire second chopstick, if success, then eat
                 isEating = true;
                 Thread.sleep(TIME_IT_TAKES_TO_EAT); // philosopher consumes
-                servings++; // increment metric
                 isEating = false; // stop eating
                 // release both chopsticks
                 rightChop.release();
                 leftChop.release();
+                servings++; // increment metric
                 // The philosopher will think for a random amount of time
                 Thread.sleep((long) (Math.random() * TIME_IT_TAKES_TO_EAT));
             } else {
@@ -109,7 +111,7 @@ public class Philosopher implements Runnable {
             attending = false; // stops look of philosopher eating
             philThread.join(); // stops the phil thread
         } catch (InterruptedException e) {
-            System.err.println("Philosopher " + name + "join thread interrupted");
+            System.err.println("Philosopher " + name + " join thread interrupted");
         }
     }
 
@@ -118,6 +120,13 @@ public class Philosopher implements Runnable {
      */
     public void startPhil() {
         philThread.start();
+    }
+
+    /**
+     * Gets the amount of servings
+     */
+    public int getServings(){
+        return servings;
     }
 
     // TODO: return statistics from philosophers:
