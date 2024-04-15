@@ -89,20 +89,20 @@ public class DinnerGUI extends JPanel {
      */
     public static boolean validateArgs(String[] args){
         if (args.length == 2) {
-            try{
+            try{ // If args[0] cant be parsed, then return error
                 Integer.parseInt(args[0]);
             }catch (NumberFormatException e){
                 System.err.println("Invalid philosopher quantity, must be an integer");
                 return false;
             }
-            try{
+            try{ // If args[1] cant be parsed, then return error
                 Integer.parseInt(args[1]);
             }catch (NumberFormatException e){
                 System.err.println("Invalid runtime, must be an integer");
                 return false;
             }
             return true;
-        }else{
+        }else{ // if there are too few or too many arguments passed, then tell user what they need to do.
             System.err.println("Invalid number of arguments, you must pass 2 arguments; number of philosophers and runtime in seconds");
             return false;
         }
