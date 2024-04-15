@@ -11,17 +11,18 @@ public class Philosopher implements Runnable {
     private final TSChopstick rightChop;
     private final TSChopstick leftChop;
     private final int TIME_IT_TAKES_TO_EAT = 500; // time in ms that the philosopher will be eating
+    private final Thread philThread;
     private volatile boolean attending = true; // if the philosopher is attending, then keeping dining
     private volatile boolean isEating = false; // true if the philosopher is currently eating
     private int servings; // number of times philosopher has eaten
-    private final Thread philThread;
 
     /**
      * Philosopher sets the name, and each chopstick
      * Threading is managed internally to decrease complexity
+     *
      * @param name
      * @param rightChop TSChopstick
-     * @param leftChop TSChopstick
+     * @param leftChop  TSChopstick
      */
     Philosopher(String name, TSChopstick rightChop, TSChopstick leftChop) {
         this.name = name;
@@ -54,6 +55,7 @@ public class Philosopher implements Runnable {
      * to the hold and wait requirement for deadlocks. We use this system in tryToEat.
      * Once acquired both chopsticks, the philosopher waits for the TIME_IT_TAKES_TO_EAT then released both then
      * waits for a random period of time from 0 to TIME_IT_TAKES_TO_EAT to think, then attempts to eat again
+     *
      * @throws InterruptedException
      */
     private synchronized void tryToEat() throws InterruptedException {
@@ -76,6 +78,7 @@ public class Philosopher implements Runnable {
 
     /**
      * Get the name of the philosopher
+     *
      * @return name String
      */
     public String getName() {
@@ -84,6 +87,7 @@ public class Philosopher implements Runnable {
 
     /**
      * Get eating status
+     *
      * @return isEating bool
      */
     public boolean isEating() {
@@ -92,6 +96,7 @@ public class Philosopher implements Runnable {
 
     /**
      * Get left chopstick
+     *
      * @return leftChop TSChopstick
      */
     public TSChopstick getLeftChop() {

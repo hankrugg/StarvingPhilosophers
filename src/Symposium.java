@@ -41,7 +41,7 @@ public class Symposium {
         phils = Collections.synchronizedList(new ArrayList<>()); // create list
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
             // Create philosopher with specific chopsticks and adds them to the list
-            phils.add( new Philosopher("Phil " + i, chopsticks.get(i), chopsticks.get((i + 1) % (NUM_PHILOSOPHERS - 1))));
+            phils.add(new Philosopher("Phil " + i, chopsticks.get(i), chopsticks.get((i + 1) % (NUM_PHILOSOPHERS - 1))));
         }
     }
 
@@ -56,6 +56,7 @@ public class Symposium {
 
     /**
      * checkWhosEating returns list of all the currently eating philosophers
+     *
      * @return eaters ArrayList<Philospher>
      */
     public List<Philosopher> checkWhosEating() {
@@ -70,6 +71,7 @@ public class Symposium {
 
     /**
      * checkUsedChopsticks returns all currently used chopsticks
+     *
      * @return usedChopsticks ArrayList<TSChopstick>
      */
     public List<TSChopstick> checkUsedChopsticks() {
@@ -84,6 +86,7 @@ public class Symposium {
 
     /**
      * getChopsticks returns all chopsticks
+     *
      * @return chopsticks List<TSChopsticks>
      */
     public List<TSChopstick> getChopsticks() {
@@ -92,6 +95,7 @@ public class Symposium {
 
     /**
      * getPhilosophers returns all philosophers
+     *
      * @return philosophers List<Philosophers>
      */
     public List<Philosopher> getPhilosophers() {

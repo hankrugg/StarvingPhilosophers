@@ -14,11 +14,13 @@ public class TSChopstick {
      * TSChopstick sets the name of the chopstick. Chopstick starts as not used
      * Acquire to use the chopstick
      * release to release the chopstick, if chopstick is not acquired, release will throw a runtime exception.
+     *
      * @param name
      */
     public TSChopstick(String name) {
         this.name = name;
     }
+
     /**
      * acquire will allow a user to acquire the chopstick.
      * it will not be allowed to be used by any other thread until it is released
@@ -35,6 +37,7 @@ public class TSChopstick {
     /**
      * release will allow the chopstick to be acquired again.
      * if chopstick is not acquired when released, then release will throw a Runtime Exception
+     *
      * @throws RuntimeException
      */
     public synchronized void release() {
@@ -47,6 +50,7 @@ public class TSChopstick {
 
     /**
      * isUsed returns the current status of the chopstick
+     *
      * @return status of chopstick
      */
     public boolean isUsed() {
