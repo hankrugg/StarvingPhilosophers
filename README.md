@@ -1,5 +1,5 @@
 ### Starving Philosophers
-Programmed by Hank Rugg and Aidan Scott
+#### Programmed by Hank Rugg and Aidan Scott
 This program is a solution to the starving philosophers problem.
 By first understanding what problems the starving philosophers problem creates, race conditions, starvation and deadlocks
 we were able to solve each problem methodically:
